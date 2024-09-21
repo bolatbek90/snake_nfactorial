@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Èãðà Çìåéêà</title>
+    <title>Игра Змейка</title>
     <style>
         body {
             background-color: #000;
@@ -13,9 +13,9 @@
             display: block;
             margin: 0;
             padding: 0;
-            background-color: #0000FF; /* ßðêî ñèíèé ôîí */
+            background-color: #800080; /* Фиолетовый фон */
         }
-        /* Ñòèëè êíîïîê óïðàâëåíèÿ */
+        /* Стили кнопок управления */
         #controls {
             position: fixed;
             bottom: 5%;
@@ -48,26 +48,43 @@
         #controls button:active {
             background-color: #ddd;
         }
+
+        /* Фейерверк */
+        #fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <canvas id="game"></canvas>
+    <canvas id="fireworks"></canvas>
 
-    <!-- Êíîïêè óïðàâëåíèÿ -->
+    <!-- Кнопки управления -->
     <div id="controls">
-        <button id="left">??</button>
+        <button id="left">⬅️</button>
         <div class="up-down">
-            <button id="up">??</button>
-            <button id="down">??</button>
+            <button id="up">⬆️</button>
+            <button id="down">⬇️</button>
         </div>
-        <button id="right">??</button>
+        <button id="right">➡️</button>
     </div>
 
     <script>
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
 
-        // Óñòàíîâêà ðàçìåðîâ êàíâàñà íà ïîëíûé ýêðàí
+        // Окно для ввода имени
+        let playerName = prompt("Введите своё имя:");
+
+        // Отображение приветствия
+        alert(`Привет, ${playerName}!`);
+
+        // Установка размеров канваса на полный экран
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -75,7 +92,7 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Ïàðàìåòðû èãðû
+        // Параметры игры
         const gridSize = 20;
         let snake = [{x: gridSize * 5, y: gridSize * 5}];
         let dx = gridSize;
@@ -83,17 +100,17 @@
         let food = {x: 0, y: 0};
         let score = 0;
 
-        const word = "nFactorial"; // Ñëîâî, êîòîðîå áóäåò îòîáðàæàòüñÿ
-        let lettersCollected = 0; // Ñ÷¸ò÷èê ñúåäåííûõ áóêâ
+        const word = "nFactorial"; // Слово, которое будет отображаться
+        let lettersCollected = 0; // Счётчик съеденных букв
 
-        // Ñîçäàíèå åäû
+        // Создание еды
         createFood();
 
-        // Îñíîâíîé èãðîâîé öèêë
+        // Основной игровой цикл
         function gameLoop() {
             if (isGameOver()) {
-                alert('Èãðà îêîí÷åíà! Âàø ñ÷¸ò: ' + score);
-                document.location.reload();
+                alert(`Ты это сделал, ${playerName}!`);
+                launchFireworks();
                 return;
             }
             setTimeout(function onTick() {
@@ -120,21 +137,27 @@
         function moveSnake() {
             const head = {x: snake[0].x + dx, y: snake[0].y + dy};
 
-            // Äîáàâëÿåì íîâóþ ãîëîâó çìåéêè
+            // Добавляем новую голову змейки
             snake.unshift(head);
 
-            // Ïðîâåðÿåì, ñúåëà ëè çìåéêà åäó
+            // Проверяем, съела ли змейка еду
             if (head.x === food.x && head.y === food.y) {
                 score += 1;
                 createFood();
                 
-                // Äîáàâëÿåì íîâóþ áóêâó èç ñëîâà "nFactorial"
+                // Добавляем новую букву из слова "nFactorial"
                 if (lettersCollected < word.length) {
                     lettersCollected += 1;
                 }
 
+                // Если все буквы добавлены, заканчиваем игру
+                if (lettersCollected === word.length && score >= 20) {
+                    alert(`Ты это сделал, ${playerName}!`);
+                    launchFireworks();
+                }
+
             } else {
-                // Óäàëÿåì ïîñëåäíèé ýëåìåíò, åñëè åäà íå ñúåäåíà
+                // Удаляем последний элемент, если еда не съедена
                 snake.pop();
             }
         }
@@ -152,7 +175,7 @@
         function isGameOver() {
             const head = snake[0];
 
-            // Ïðîâåðÿåì ñòîëêíîâåíèå ñî ñòåíàìè
+            // Проверяем столкновение со стенами
             const hitLeftWall = head.x < 0;
             const hitRightWall = head.x >= canvas.width;
             const hitTopWall = head.y < 0;
@@ -162,7 +185,7 @@
                 return true;
             }
 
-            // Ïðîâåðÿåì ñòîëêíîâåíèå ñ ñàìèì ñîáîé
+            // Проверяем столкновение с самим собой
             for (let i = 4; i < snake.length; i++) {
                 if (snake[i].x === head.x && snake[i].y === head.y) {
                     return true;
@@ -171,17 +194,17 @@
             return false;
         }
 
-        // Ðèñóåì ñëîâî íà ôîíå
+        // Рисуем слово на фоне
         function drawBackgroundWord() {
             ctx.font = '48px Arial';
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'black'; // Чёрный текст на фиолетовом фоне
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const wordToShow = word.slice(0, Math.min(lettersCollected, word.length));
             ctx.fillText(wordToShow, canvas.width / 2, canvas.height / 2);
         }
 
-        // Óïðàâëåíèå çìåéêîé ñ ïîìîùüþ êëàâèø
+        // Управление змейкой с помощью клавиш
         document.addEventListener('keydown', changeDirection);
 
         function changeDirection(event) {
@@ -215,7 +238,7 @@
             }
         }
 
-        // Äîáàâëÿåì îáðàáîò÷èêè ñîáûòèé äëÿ êíîïîê óïðàâëåíèÿ
+        // Добавляем обработчики событий для кнопок управления
         function handleLeft(event) {
             event.preventDefault();
             if (dx === 0) {
@@ -260,45 +283,55 @@
         document.getElementById('right').addEventListener('touchstart', handleRight);
         document.getElementById('right').addEventListener('click', handleRight);
 
-        // Äîáàâëÿåì óïðàâëåíèå ñâàéïàìè íà êàíâàñå
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        canvas.addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            const touch = event.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-        }, false);
-
-        canvas.addEventListener('touchend', function(event) {
-            event.preventDefault();
-            const touch = event.changedTouches[0];
-            const touchEndX = touch.clientX;
-            const touchEndY = touch.clientY;
-
-            const diffX = touchEndX - touchStartX;
-            const diffY = touchEndY - touchStartY;
-
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                // Ãîðèçîíòàëüíûé ñâàéï
-                if (diffX > 0) {
-                    handleRight(event);
-                } else {
-                    handleLeft(event);
-                }
-            } else {
-                // Âåðòèêàëüíûé ñâàéï
-                if (diffY > 0) {
-                    handleDown(event);
-                } else {
-                    handleUp(event);
-                }
-            }
-        }, false);
-
-        // Çàïóñêàåì èãðó
+        // Запускаем игру
         gameLoop();
+
+        // Функция для запуска фейерверков
+        function launchFireworks() {
+            const fireworksCanvas = document.getElementById('fireworks');
+            const fireworksCtx = fireworksCanvas.getContext('2d');
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+
+            let fireworks = [];
+
+            function createFirework() {
+                let firework = {
+                    x: Math.random() * fireworksCanvas.width,
+                    y: fireworksCanvas.height,
+                    targetY: Math.random() * fireworksCanvas.height / 2,
+                    speed: Math.random() * 5 + 2,
+                    radius: 2
+                };
+                fireworks.push(firework);
+            }
+
+            function drawFireworks() {
+                fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+                for (let i = fireworks.length - 1; i >= 0; i--) {
+                    let firework = fireworks[i];
+
+                    fireworksCtx.beginPath();
+                    fireworksCtx.arc(firework.x, firework.y, firework.radius, 0, Math.PI * 2);
+                    fireworksCtx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    fireworksCtx.fill();
+
+                    firework.y -= firework.speed;
+                    firework.radius += 0.1;
+
+                    if (firework.y < firework.targetY) {
+                        fireworks.splice(i, 1);
+                        createFirework();
+                    }
+                }
+
+                requestAnimationFrame(drawFireworks);
+            }
+
+            createFirework();
+            drawFireworks();
+        }
     </script>
 </body>
 </html>
