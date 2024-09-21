@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Игра Змейка</title>
+    <title>Г€ГЈГ°Г  Г‡Г¬ГҐГ©ГЄГ </title>
     <style>
         body {
             background-color: #000;
@@ -13,9 +13,9 @@
             display: block;
             margin: 0;
             padding: 0;
-            background-color: #0000FF; /* Ярко синий фон */
+            background-color: #0000FF; /* ГџГ°ГЄГ® Г±ГЁГ­ГЁГ© ГґГ®Г­ */
         }
-        /* Стили кнопок управления */
+        /* Г‘ГІГЁГ«ГЁ ГЄГ­Г®ГЇГ®ГЄ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї */
         #controls {
             position: fixed;
             bottom: 5%;
@@ -53,7 +53,7 @@
 <body>
     <canvas id="game"></canvas>
 
-    <!-- Кнопки управления -->
+    <!-- ГЉГ­Г®ГЇГЄГЁ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї -->
     <div id="controls">
         <button id="left">??</button>
         <div class="up-down">
@@ -67,7 +67,7 @@
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
 
-        // Установка размеров канваса на полный экран
+        // Г“Г±ГІГ Г­Г®ГўГЄГ  Г°Г Г§Г¬ГҐГ°Г®Гў ГЄГ Г­ГўГ Г±Г  Г­Г  ГЇГ®Г«Г­Г»Г© ГЅГЄГ°Г Г­
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -75,7 +75,7 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Параметры игры
+        // ГЏГ Г°Г Г¬ГҐГІГ°Г» ГЁГЈГ°Г»
         const gridSize = 20;
         let snake = [{x: gridSize * 5, y: gridSize * 5}];
         let dx = gridSize;
@@ -83,16 +83,16 @@
         let food = {x: 0, y: 0};
         let score = 0;
 
-        const word = "nFactorial"; // Слово, которое будет отображаться
-        let lettersCollected = 0; // Счётчик съеденных букв
+        const word = "nFactorial"; // Г‘Г«Г®ГўГ®, ГЄГ®ГІГ®Г°Г®ГҐ ГЎГіГ¤ГҐГІ Г®ГІГ®ГЎГ°Г Г¦Г ГІГјГ±Гї
+        let lettersCollected = 0; // Г‘Г·ВёГІГ·ГЁГЄ Г±ГєГҐГ¤ГҐГ­Г­Г»Гµ ГЎГіГЄГў
 
-        // Создание еды
+        // Г‘Г®Г§Г¤Г Г­ГЁГҐ ГҐГ¤Г»
         createFood();
 
-        // Основной игровой цикл
+        // ГЋГ±Г­Г®ГўГ­Г®Г© ГЁГЈГ°Г®ГўГ®Г© Г¶ГЁГЄГ«
         function gameLoop() {
             if (isGameOver()) {
-                alert('Игра окончена! Ваш счёт: ' + score);
+                alert('Г€ГЈГ°Г  Г®ГЄГ®Г­Г·ГҐГ­Г ! Г‚Г Гё Г±Г·ВёГІ: ' + score);
                 document.location.reload();
                 return;
             }
@@ -120,21 +120,21 @@
         function moveSnake() {
             const head = {x: snake[0].x + dx, y: snake[0].y + dy};
 
-            // Добавляем новую голову змейки
+            // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ Г­Г®ГўГіГѕ ГЈГ®Г«Г®ГўГі Г§Г¬ГҐГ©ГЄГЁ
             snake.unshift(head);
 
-            // Проверяем, съела ли змейка еду
+            // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬, Г±ГєГҐГ«Г  Г«ГЁ Г§Г¬ГҐГ©ГЄГ  ГҐГ¤Гі
             if (head.x === food.x && head.y === food.y) {
                 score += 1;
                 createFood();
                 
-                // Добавляем новую букву из слова "nFactorial"
+                // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ Г­Г®ГўГіГѕ ГЎГіГЄГўГі ГЁГ§ Г±Г«Г®ГўГ  "nFactorial"
                 if (lettersCollected < word.length) {
                     lettersCollected += 1;
                 }
 
             } else {
-                // Удаляем последний элемент, если еда не съедена
+                // Г“Г¤Г Г«ГїГҐГ¬ ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ© ГЅГ«ГҐГ¬ГҐГ­ГІ, ГҐГ±Г«ГЁ ГҐГ¤Г  Г­ГҐ Г±ГєГҐГ¤ГҐГ­Г 
                 snake.pop();
             }
         }
@@ -152,7 +152,7 @@
         function isGameOver() {
             const head = snake[0];
 
-            // Проверяем столкновение со стенами
+            // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬ Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГҐ Г±Г® Г±ГІГҐГ­Г Г¬ГЁ
             const hitLeftWall = head.x < 0;
             const hitRightWall = head.x >= canvas.width;
             const hitTopWall = head.y < 0;
@@ -162,7 +162,7 @@
                 return true;
             }
 
-            // Проверяем столкновение с самим собой
+            // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬ Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГҐ Г± Г±Г Г¬ГЁГ¬ Г±Г®ГЎГ®Г©
             for (let i = 4; i < snake.length; i++) {
                 if (snake[i].x === head.x && snake[i].y === head.y) {
                     return true;
@@ -171,7 +171,7 @@
             return false;
         }
 
-        // Рисуем слово на фоне
+        // ГђГЁГ±ГіГҐГ¬ Г±Г«Г®ГўГ® Г­Г  ГґГ®Г­ГҐ
         function drawBackgroundWord() {
             ctx.font = '48px Arial';
             ctx.fillStyle = 'white';
@@ -181,7 +181,7 @@
             ctx.fillText(wordToShow, canvas.width / 2, canvas.height / 2);
         }
 
-        // Управление змейкой с помощью клавиш
+        // Г“ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ Г§Г¬ГҐГ©ГЄГ®Г© Г± ГЇГ®Г¬Г®Г№ГјГѕ ГЄГ«Г ГўГЁГё
         document.addEventListener('keydown', changeDirection);
 
         function changeDirection(event) {
@@ -215,7 +215,7 @@
             }
         }
 
-        // Добавляем обработчики событий для кнопок управления
+        // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ Г®ГЎГ°Г ГЎГ®ГІГ·ГЁГЄГЁ Г±Г®ГЎГ»ГІГЁГ© Г¤Г«Гї ГЄГ­Г®ГЇГ®ГЄ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї
         function handleLeft(event) {
             event.preventDefault();
             if (dx === 0) {
@@ -260,7 +260,7 @@
         document.getElementById('right').addEventListener('touchstart', handleRight);
         document.getElementById('right').addEventListener('click', handleRight);
 
-        // Добавляем управление свайпами на канвасе
+        // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГҐ Г±ГўГ Г©ГЇГ Г¬ГЁ Г­Г  ГЄГ Г­ГўГ Г±ГҐ
         let touchStartX = 0;
         let touchStartY = 0;
 
@@ -281,14 +281,14 @@
             const diffY = touchEndY - touchStartY;
 
             if (Math.abs(diffX) > Math.abs(diffY)) {
-                // Горизонтальный свайп
+                // ГѓГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г»Г© Г±ГўГ Г©ГЇ
                 if (diffX > 0) {
                     handleRight(event);
                 } else {
                     handleLeft(event);
                 }
             } else {
-                // Вертикальный свайп
+                // Г‚ГҐГ°ГІГЁГЄГ Г«ГјГ­Г»Г© Г±ГўГ Г©ГЇ
                 if (diffY > 0) {
                     handleDown(event);
                 } else {
@@ -297,7 +297,7 @@
             }
         }, false);
 
-        // Запускаем игру
+        // Г‡Г ГЇГіГ±ГЄГ ГҐГ¬ ГЁГЈГ°Гі
         gameLoop();
     </script>
 </body>
